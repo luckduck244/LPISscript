@@ -54,22 +54,42 @@ for (var count = 0; checkBoxes.length > count; count++){
     }
 
 
+
+
 }
-    console.log(rowsClicked);
+
+function chromeSet(){
+    chrome.storage.local.set({
+        list:rowsClicked
+    }, function() {
+        console.log("added to list");
+    });
+}
 
 
-/*
+function chromeGet(){
+    chrome.storage.local.get({
+        list:[] //put defaultvalues if any
+    }, function(data) {
+            console.log(data.list.innerHTML);
+        }
+    );
+}
 
-chrome.storage.local.set({'row': banana}, function() {
-    // banana save notification
-    // console.log('Banana saved');
-});
+    /*
 
-chrome.storage.local.get('color', function(result) {
-    var bananaColor = result.color;
-    window.alert(bananaColor);
-});
 
-*/
+
+    chrome.storage.local.set({'row': banana}, function() {
+        // banana save notification
+        // console.log('Banana saved');
+    });
+
+    chrome.storage.local.get('color', function(result) {
+        var bananaColor = result.color;
+        window.alert(bananaColor);
+    });
+
+    */
 
 }
