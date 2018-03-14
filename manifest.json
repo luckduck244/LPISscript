@@ -13,13 +13,6 @@
     }
   ],
 
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": true
-
-  },
-
-
   "browser_action": {
     "default_icon": "icon128.png",
     "default_popup": "popup.html"
