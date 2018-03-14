@@ -1,5 +1,25 @@
+chrome.storage.local.get('lvNumbers', function(result) {
+    console.log('Initial LV numbers:');
+    var output = result['lvNumbers'];
+    console.log(output);
+
+
+chrome.storage.local.get('studentName', function(result) {
+    console.log('Student Number:');
+    var output = result['studentName'];
+    console.log("h"+output);
+
+    chrome.storage.local.get('studentPassword', function(result) {
+        console.log('Student Password:');
+        var output = result['studentPassword'];
+        console.log(output);
+
+
 addCheckboxes();
 submitAdd();
+
+
+
 
 function addCheckboxes()
 {
@@ -11,7 +31,6 @@ function addCheckboxes()
         element.setAttribute("type", "checkbox");
         element.setAttribute("id", "cb"+i);
         element.onclick = checkBox;
-  //      element.submitForm = td[i];
         td[i].parentNode.appendChild(element);
     }
 }
@@ -42,54 +61,47 @@ function submitAdd() {
 }
 
 
-function submitClick() {
 
-    var checkBoxes = document.querySelectorAll("[id^=cb]");
-    var rowsClicked = [];
 
-for (var count = 0; checkBoxes.length > count; count++){
 
-    if (checkBoxes[count].checked) {
-        rowsClicked.push(checkBoxes[count].parentNode.parentNode);
+    });
+});
+});
+
+    function submitClick() {
+
+        var checkBoxes = document.querySelectorAll("[id^=cb]");
+        var lvNumbers = [];
+
+        for (var count = 0; checkBoxes.length > count; count++) {
+
+            if (checkBoxes[count].checked) {
+                var row = checkBoxes[count].parentNode.parentNode;
+                var lvN = row.getElementsByTagName("a")[0].innerHTML;
+                lvNumbers.push(lvN);
+            }
+        }
+
+        chromeSet('lvNumbers', lvNumbers);
+
+    }
+
+    function chromeSet(key, value){
+        chrome.storage.local.set({
+            [key]:value
+        }, function() {
+            console.log('Output below saved to storage');
+            console.log(value);
+            chromeGet(key);
+        });
     }
 
 
-
-
-}
-
-function chromeSet(){
-    chrome.storage.local.set({
-        list:rowsClicked
-    }, function() {
-        console.log("added to list");
-    });
-}
-
-
-function chromeGet(){
-    chrome.storage.local.get({
-        list:[] //put defaultvalues if any
-    }, function(data) {
-            console.log(data.list.innerHTML);
-        }
-    );
-}
-
-    /*
-
-
-
-    chrome.storage.local.set({'row': banana}, function() {
-        // banana save notification
-        // console.log('Banana saved');
-    });
-
-    chrome.storage.local.get('color', function(result) {
-        var bananaColor = result.color;
-        window.alert(bananaColor);
-    });
-
-    */
-
-}
+    function chromeGet(key){
+        chrome.storage.local.get([key], function(result) {
+                console.log('Output below retrieved from storage');
+                var output = result[key];
+                console.log(output);
+            }
+        );
+    }
