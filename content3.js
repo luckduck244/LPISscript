@@ -124,36 +124,15 @@ function submitClick(){
             lvNumbers.push(lvN);
         }
     }
-<<<<<<< HEAD
+
     chromeSet('lvNumbers', lvNumbers);
 }
-=======
-
-    function chromeSet(key, value){
-        chrome.storage.local.set({
-            [key]:value
-        }, function() {
-            console.log('Output below saved to storage');
-            console.log(value);
-            chromeGet(key);
-        });
-    }
 
 
-    function chromeGet(key){
-        chrome.storage.local.get([key], function(result) {
-                console.log('Output below retrieved from storage');
-                var output = result[key];
-                console.log(output);
-            }
-        );
-    }
-
-    //gets the Servers Time (async is deprecated jQuery issue)
-    function getServerTime() {
-        return $.ajax({async: false}).getResponseHeader( 'Date' );
-    }
+//gets the Servers Time (async is deprecated jQuery issue)
+function getServerTime() {
+    return $.ajax({async: false}).getResponseHeader( 'Date' );
+}
 
 console.log('Server Time: ', getServerTime());
 console.log('Locale Time: ', new Date(getServerTime()));
->>>>>>> 3f16a530f4c2e6da7271d520b5639d90247a5a53
