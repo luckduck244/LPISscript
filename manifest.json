@@ -7,8 +7,8 @@
 
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-   //   "css": ["styles.css"],
+      "matches": ["https://lpis.wu.ac.at/*", "file://*/*", "https://www.wu.ac.at/studierende/tools-services/lpis/"],
+      //"css": ["styles.css"],
       "js": ["jquery-3.3.1.js", "content3.js"]
     }
   ],
