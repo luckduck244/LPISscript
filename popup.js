@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function chromeGet(){
-    chrome.storage.local.get(['list'], function(result) {
-            var output = result['list'];
+    chrome.storage.local.get(['lvNumbers'], function(result) {
+            var output = result['lvNumbers'];
 
             document.getElementById("lvNumbers").innerHTML += "Active Registrations: <br>";
             for (var i = 0; output.length > i; i++){
