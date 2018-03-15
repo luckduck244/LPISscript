@@ -1,14 +1,15 @@
+//on popup load
 document.addEventListener('DOMContentLoaded', function () {
 
-    document.getElementById("popupSubmit").onclick = yolo;
+    document.getElementById("popupSubmit").onclick = popupSubmit;
 
-
-    chromeGet();
+        displayActive();
 
 });
 
 
-function chromeGet(){
+//Displays currently active lvNumbers
+function displayActive(){
     chrome.storage.local.get(['lvNumbers'], function(result) {
             var output = result['lvNumbers'];
 
@@ -20,45 +21,24 @@ function chromeGet(){
     );
 }
 
-function yolo(){
 
-    /*
-    {
-        var elements = document.getElementById("popupForm").elements;
-        var obj ={};
-        for(var i = 0 ; i < elements.length ; i++){
-            var item = elements.item(i);
-            obj[item.name] = item.value;
-        }
-
-        document.body.innerHTML += JSON.stringify(obj);
-    }
-    */
+//takes form value and writes it to storage
+function popupSubmit(){
 
     var elements = document.getElementById("popupForm").elements;
-    var studentName = elements[0].value;
+    var studentNumber = elements[0].value;
     var studentPassword = elements[1].value;
 
-    chromeSet('studentName', studentName);
+    chromeSet('studentNumber', studentNumber);
     chromeSet('studentPassword', studentPassword);
-
 }
 
+
 function chromeSet(key, value){
+
     chrome.storage.local.set({
         [key]:value
     }, function() {
 
-       // chromeGetty(key);
-
     });
 }
-
-/*
-function chromeGetty(key){
-    chrome.storage.local.get(key, function(result) {
-            var output = result[key];
-            }
-    );
-}
-*/
