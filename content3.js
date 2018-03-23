@@ -3,11 +3,14 @@
  *
  *  --------------------------------------------------------------------------------
  *  TODO:
+ *  FEATURES
  *  Open tabs with 1 lvNumber each from array (lvNumberActive)
  *  Auto registration with lvNumberActive
  *      chrome.storage.local.get only one from array and save it in lvNumberActive
  *      get server time for refresh
  *      have lvNumberActive displayed in <title>
+ *
+ *  AESTHETICS
  *  Make popup.html and popup.js something that was not hacked together in 5 minutes
  *  Improve documentation
  *  Ensure ES6 usage
@@ -107,7 +110,8 @@ function addSubmit(){
     element.setAttribute("type", "button");
     element.setAttribute("value", "Submit");
     element.onclick = submitClick;
-    document.body.appendChild(element);
+    var tbl = document.querySelector("[class=b3k-data]");
+    tbl.appendChild(element);
 }
 
 //saves ticked lvNumbers to storage
@@ -134,5 +138,8 @@ function getServerTime() {
     return $.ajax({async: false}).getResponseHeader( 'Date' );
 }
 
+/*
 console.log('Server Time: ', getServerTime());
 console.log('Locale Time: ', new Date(getServerTime()));
+
+*/
