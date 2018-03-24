@@ -21,26 +21,35 @@
 
 //Asynchronous calls to get user information and lvNumberActive from storage
 //TODO: 1 lvNumber per tab -> lvNumberActive
-chrome.storage.local.get('lvNumbers', function(result) {
-    console.log('Initial LV numbers:');
-    var output = result['lvNumbers'];
-    console.log(output);
+
+if (window.location.href.charAt(window.location.href.length-5) === "?"){
+    lvNumberActive = window.location.href.substr(window.location.href.length - 4);
+}
+else {lvNumberActive = "";}
+
+chrome.storage.local.get('studentNumber', function(result) {
+    console.log('Student Number:');
+    let output = result['studentNumber'];
+    console.log("h"+output);
 
 
-    chrome.storage.local.get('studentNumber', function(result) {
-        console.log('Student Number:');
-        var output = result['studentNumber'];
-        console.log("h"+output);
+    chrome.storage.local.get('studentPassword', function(result) {
+        console.log('Student Password:');
+        let output = result['studentPassword'];
+        console.log(output);
 
-
-        chrome.storage.local.get('studentPassword', function(result) {
-            console.log('Student Password:');
-            var output = result['studentPassword'];
-            console.log(output);
+            chrome.storage.local.get('lvNumbers', function(result) {
+                console.log('Initial LV numbers:');
+                let output = result['lvNumbers'];
+                console.log(output);
 
             //runtime code goes here
             addCheckboxes();
             addSubmit();
+
+            console.log("active lv: "+lvNumberActive);
+
+
 
         });
     });
@@ -65,7 +74,7 @@ function chromeGet(key){
 
     chrome.storage.local.get([key], function(result) {
             console.log('Output below retrieved from storage');
-            var output = result[key];
+            let output = result[key];
             console.log(output);
         }
     );
@@ -75,9 +84,9 @@ function chromeGet(key){
 //add checkboxes in each row and give onclick functionality
 function addCheckboxes(){
 
-    var td = document.querySelectorAll("[id^=SPAN]");
-    for (var i = 0; i < td.length; i++){
-        var element = document.createElement("input");
+    let td = document.querySelectorAll("[id^=SPAN]");
+    for (let i = 0; i < td.length; i++){
+        let element = document.createElement("input");
         element.setAttribute("value", "auto login");
         element.setAttribute("type", "checkbox");
         element.setAttribute("id", "cb"+i);
@@ -90,7 +99,7 @@ function addCheckboxes(){
 //row color change functionality for checkboxes
 function checkBoxClick(){
 
-    var checkRow = this.parentNode.parentNode;
+    let checkRow = this.parentNode.parentNode;
 
     //color blue not yet checked
     if(this.checked){checkRow.style.backgroundColor = 'powderBlue';}
@@ -106,39 +115,56 @@ function checkBoxClick(){
 //add submit button at the end of body and give onclick functionality
 function addSubmit(){
 
-    var element = document.createElement("input");
+    let element = document.createElement("input");
     element.setAttribute("type", "button");
     element.setAttribute("value", "Submit");
     element.onclick = submitClick;
-    var tbl = document.querySelector("[class=b3k-data]");
-    tbl.appendChild(element);
+    let tbl = document.querySelector("[class=b3k-data]");
+    if (document.querySelectorAll("[id^=cb]").length > 0){
+        //prevents button from being displayed on login page - UGLY
+        tbl.appendChild(element);}
 }
 
 //saves ticked lvNumbers to storage
 function submitClick(){
 
-    var checkBoxes = document.querySelectorAll("[id^=cb]");
-    var lvNumbers = [];
+    let checkBoxes = document.querySelectorAll("[id^=cb]");
+    let lvNumbers = [];
 
-    for (var count = 0; checkBoxes.length > count; count++) {
+    for (let i = 0; checkBoxes.length > i; i++) {
 
-        if (checkBoxes[count].checked) {
-            var row = checkBoxes[count].parentNode.parentNode;
-            var lvN = row.getElementsByTagName("a")[0].innerHTML;
+        if (checkBoxes[i].checked) {
+            let row = checkBoxes[i].parentNode.parentNode;
+            let lvN = row.getElementsByTagName("a")[0].innerHTML;
             lvNumbers.push(lvN);
         }
     }
 
+    openTabs(lvNumbers);
+
     chromeSet('lvNumbers', lvNumbers);
 }
 
+function openTabs(lvN){
+
+
+    for (let i = 0; lvN.length > i; i++){
+    chrome.runtime.sendMessage("newTab"+window.location.href+"?"+lvN[i]);
+    }
+
+}
+
+
+
+
+/*FETCH SERVER TIME
 
 //gets the Servers Time (async is deprecated jQuery issue)
 function getServerTime() {
     return $.ajax({async: false}).getResponseHeader( 'Date' );
 }
 
-/*
+
 console.log('Server Time: ', getServerTime());
 console.log('Locale Time: ', new Date(getServerTime()));
 
