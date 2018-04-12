@@ -7,6 +7,8 @@
  *      chrome.storage.local.get only one from array and save it in lvNumberActive
  *      get server time for refresh (else: compare server time to local once)
  *      ###have lvNumberActive displayed in <title>
+ *  Add urls to chrome.storage.local
+ *  pass LVs to popup & open tabs after popup click
  *
  *  AESTHETICS
  *  Make popup.html and popup.js something that was not hacked together in 5 minutes
