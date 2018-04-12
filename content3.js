@@ -1,14 +1,12 @@
 /*
- *  LPIS ANMELDESKRIPT CHROME EXTENSION
- *
  *  --------------------------------------------------------------------------------
  *  TODO:
  *  FEATURES
- *  Open tabs with 1 lvNumber each from array (lvNumberActive)
+ *  ###Open tabs with 1 lvNumber each from array (lvNumberActive)
  *  Auto registration with lvNumberActive
  *      chrome.storage.local.get only one from array and save it in lvNumberActive
- *      get server time for refresh
- *      have lvNumberActive displayed in <title>
+ *      get server time for refresh (else: compare server time to local once)
+ *      ###have lvNumberActive displayed in <title>
  *
  *  AESTHETICS
  *  Make popup.html and popup.js something that was not hacked together in 5 minutes
@@ -19,11 +17,10 @@
  */
 
 
-//Asynchronous calls to get user information and lvNumberActive from storage
-//TODO: 1 lvNumber per tab -> lvNumberActive
-
 if (window.location.href.charAt(window.location.href.length-5) === "?"){
     lvNumberActive = window.location.href.substr(window.location.href.length - 4);
+    let emoji = "🦆";
+    document.title = emoji + " LV reg: "+lvNumberActive;
 }
 else {lvNumberActive = "";}
 
@@ -43,11 +40,45 @@ chrome.storage.local.get('studentNumber', function(result) {
                 let output = result['lvNumbers'];
                 console.log(output);
 
-            //runtime code goes here
-            addCheckboxes();
-            addSubmit();
+                //runtime code goes here
 
-            console.log("active lv: "+lvNumberActive);
+                addCheckboxes();
+
+                //clicks inital lvNumbers
+                let lvLinks = document.querySelector("[class=b3k-data]").querySelectorAll("a");
+
+                for (let i = 0; output.length > i; i++) {
+
+                    for (let j = 0; lvLinks.length > j; j++) {
+                        if (lvLinks[j].textContent === output[i]) {
+                            let checkedRow = lvLinks[j].parentNode.parentNode;
+
+                            console.log(checkedRow.querySelector("[id^=cb]"));
+                            checkedRow.querySelector("[id^=cb]").click();
+                        }
+
+                    }
+                }
+
+
+
+
+                //select row from lvNumberActive
+                for (let i = 0; lvLinks.length > i; i++){
+                    if (lvLinks[i].textContent === lvNumberActive)
+                        {
+                            console.log(lvLinks[i].parentNode.parentNode); //row with lvNumberActive
+                        }
+
+                }
+
+                addSubmit();
+
+
+
+                console.log("active lv: "+lvNumberActive);
+
+
 
 
 
