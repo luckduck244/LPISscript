@@ -46,37 +46,37 @@ chrome.storage.local.get('studentNumber', function(result) {
 
 
                 //clicks inital lvNumbers
-                let lvLinks = document.querySelector("[class=b3k-data]").querySelectorAll("a");
+                if (output) {
+                    let lvLinks = document.querySelector("[class=b3k-data]").querySelectorAll("a");
 
-                for (let i = 0; output.length > i; i++) {
+                    for (let i = 0; output.length > i; i++) {
 
-                    for (let j = 0; lvLinks.length > j; j++) {
-                        if (lvLinks[j].textContent === output[i]) {
-                            let checkedRow = lvLinks[j].parentNode.parentNode;
+                        for (let j = 0; lvLinks.length > j; j++) {
+                            if (lvLinks[j].textContent === output[i]) {
+                                let checkedRow = lvLinks[j].parentNode.parentNode;
 
-                            console.log(checkedRow.querySelector("[id^=cb]"));
-                            checkedRow.querySelector("[id^=cb]").click();
+                                console.log(checkedRow.querySelector("[id^=cb]"));
+                                checkedRow.querySelector("[id^=cb]").click();
+                            }
+
                         }
-
                     }
-                }
 
-
-
-
-                //select row from lvNumberActive
-                for (let i = 0; lvLinks.length > i; i++){
-                    if (lvLinks[i].textContent === lvNumberActive)
-                        {
+                    //select row from lvNumberActive
+                    for (let i = 0; lvLinks.length > i; i++) {
+                        if (lvLinks[i].textContent === lvNumberActive) {
                             console.log(lvLinks[i].parentNode.parentNode); //row with lvNumberActive
                         }
 
+                    }
+
+                    if (lvNumberActive) {
+
+                        console.log("active lv: "+lvNumberActive);
+                        register(lvNumberActive);
+
+                    }
                 }
-
-
-
-                console.log("active lv: "+lvNumberActive);
-
 
 
 
@@ -182,6 +182,84 @@ function openTabs(lvN){
     chrome.runtime.sendMessage("newTab"+window.location.href+"?"+lvN[i]);
     }
 
+}
+
+
+function register(activeLV) {
+
+    //finetuneing: how many milliseconds earlier should it start?
+    var startTimeMilliseconds = 200; //ms
+
+    //set LV number
+    var lvNr = activeLV;
+
+    //function to refresh the page at given time
+    function refreshAt(hours, minutes, seconds, milliseconds) {
+        var now = new Date();
+        var then = new Date();
+
+        if(now.getHours() > hours ||
+            (now.getHours() == hours && now.getMinutes() > minutes) ||
+            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() > seconds ||
+            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() == seconds && now.getMilliseconds() >= milliseconds) {
+            then.setDate(now.getDate() + 1);
+        }
+        then.setHours(hours);
+        then.setMinutes(minutes);
+        then.setSeconds(seconds);
+        then.setMilliseconds(milliseconds);
+
+        var timeout = (then.getTime() - now.getTime());
+        setTimeout(function() { window.location.reload(true); }, timeout);
+    }
+
+    //row with lvNr in it
+    var lvRow = $("tr:contains(" + lvNr + ")");
+
+    //if there is lvNr on page
+    if (lvRow.length > 0) {
+        //form with "anmelden" button
+        var lvRegisterForm = lvRow[0].getElementsByClassName("action")[0].getElementsByTagName('form')[0];
+
+        //set startTimeHour
+        var startTimeHour = lvRow[0].querySelector("[class=timestamp]").querySelectorAll("span")[0].innerHTML.split(" ")[2].split(":")[0];
+
+        //Will refresh the page
+        refreshAt(startTimeHour - 1, 15, 59, 1000 - startTimeMilliseconds);
+
+        //anmelden button
+        var button = lvRegisterForm[lvRegisterForm.length - 1];
+
+        //displays green line
+        $( ".yui-skin-sam" ).before('<div style="background-color:green;padding:10px;"> 🐝 LV ' + lvNr + ' -> CORRECT PAGE - leave this tab open it will refresh at ' +  startTimeHour + ' o&apos;clock</div>' );
+
+        //check if Button is disabled
+        if (button.disabled === true)
+        {
+            console.log("button disabled");
+
+        }
+        else
+        {
+            //in case of WARTELISTE
+            if(button.value == 'cancel' || button.value == 'austragen')
+            {
+                console.log('cancel');
+                $( ".yui-skin-sam" ).before('<div style="background-color:red;padding:10px;"> 🐝 LV ' + lvNr + ' -> you are on the waiting list... i am sorry</div>' );
+            }
+            else
+            {
+                lvRegisterForm.submit();
+                console.log("button enabled & clicked");
+            }
+        }
+    }
+    else
+    {
+        console.log("wrong page!");
+
+        $( ".yui-skin-sam" ).before('<div style="background-color:red;padding:10px;"> 🐝 LV ' + lvNr + ' -> INCORRECT PAGE - <a href="EA?R=322245" target="_blank"><button>new tab to search LV</button></a></div>' );
+    }
 }
 
 
