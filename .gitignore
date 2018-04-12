@@ -1,4 +1,2 @@
 # exclude .idea
 .idea/*
-.idea/workspace.xml
-.idea/
