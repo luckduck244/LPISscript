@@ -41,8 +41,9 @@ chrome.storage.local.get('studentNumber', function(result) {
                 console.log(output);
 
                 //runtime code goes here
-
                 addCheckboxes();
+                addSubmit();
+
 
                 //clicks inital lvNumbers
                 let lvLinks = document.querySelector("[class=b3k-data]").querySelectorAll("a");
@@ -71,8 +72,6 @@ chrome.storage.local.get('studentNumber', function(result) {
                         }
 
                 }
-
-                addSubmit();
 
 
 

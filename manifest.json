@@ -8,19 +8,19 @@
   "content_scripts": [
     {
       "matches": ["https://lpis.wu.ac.at/*", "file://*/*", "https://www.wu.ac.at/studierende/tools-services/lpis/"],
-      //"css": ["styles.css"],
-      "js": ["jquery-3.3.1.js", "content3.js"]
+      "css": ["styles/styles.css"],
+      "js": ["scripts/ext/jquery-3.3.1.js", "scripts/content.js"]
     }
   ],
 
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["scripts/background.js"]
   },
 
 
   "browser_action": {
-    "default_icon": "icon128.png",
-    "default_popup": "popup.html"
+    "default_icon": "assets/icon128.png",
+    "default_popup": "html/popup.html"
   },
   "permissions": [
     "<all_urls>",
