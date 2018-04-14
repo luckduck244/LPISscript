@@ -19,11 +19,8 @@ for (var i = 0; i < td.length; i++)
 //if document is ready
 $( document ).ready(function() {
 
-    //length of lvNr
-    var lvNrLength = lvNr.length;
-
     //loop all lvNr & check if it's on page
-    for (var i = 0; i < lvNrLength; i++) {
+    for (var i = 0; i < lvNr.length; i++) {
 
         //display lvNr
         log("LV " + lvNr[i]);
