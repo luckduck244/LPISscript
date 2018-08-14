@@ -187,33 +187,10 @@ function openTabs(lvN){
 }
 
 
-function register(activeLV) {
+function register(lvNr) {
 
     //finetuneing: how many milliseconds earlier should it start?
     var startTimeMilliseconds = 200; //ms
-
-    //set LV number
-    var lvNr = activeLV;
-
-    //function to refresh the page at given time
-    function refreshAt(hours, minutes, seconds, milliseconds) {
-        var now = new Date();
-        var then = new Date();
-
-        if(now.getHours() > hours ||
-            (now.getHours() == hours && now.getMinutes() > minutes) ||
-            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() > seconds ||
-            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() == seconds && now.getMilliseconds() >= milliseconds) {
-            then.setDate(now.getDate() + 1);
-        }
-        then.setHours(hours);
-        then.setMinutes(minutes);
-        then.setSeconds(seconds);
-        then.setMilliseconds(milliseconds);
-
-        var timeout = (then.getTime() - now.getTime());
-        setTimeout(function() { window.location.reload(true); }, timeout);
-    }
 
     //row with lvNr in it
     var lvRow = $("tr:contains(" + lvNr + ")");
@@ -225,9 +202,6 @@ function register(activeLV) {
 
         //set startTimeHour
         var startTimeHour = lvRow[0].querySelector("[class=timestamp]").querySelectorAll("span")[0].innerHTML.split(" ")[2].split(":")[0];
-
-        //Will refresh the page
-        refreshAt(startTimeHour - 1, 15, 59, 1000 - startTimeMilliseconds);
 
         //anmelden button
         var button = lvRegisterForm[lvRegisterForm.length - 1];
@@ -255,6 +229,10 @@ function register(activeLV) {
                 console.log("button enabled & clicked");
             }
         }
+        
+        //Will refresh the page
+        refreshAt(18 - 1, 50, 59, 1000 - startTimeMilliseconds);
+        
     }
     else
     {
@@ -263,6 +241,26 @@ function register(activeLV) {
         $( ".yui-skin-sam" ).before('<div style="background-color:red;padding:10px;"> 🐝 LV ' + lvNr + ' -> INCORRECT PAGE - <a href="EA?R=322245" target="_blank"><button>new tab to search LV</button></a></div>' );
     }
 }
+
+//function to refresh the page at given time
+    function refreshAt(hours, minutes, seconds, milliseconds) {
+        var now = new Date();
+        var then = new Date();
+
+        if(now.getHours() > hours ||
+            (now.getHours() == hours && now.getMinutes() > minutes) ||
+            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() > seconds ||
+            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() == seconds && now.getMilliseconds() >= milliseconds) {
+            then.setDate(now.getDate() + 1);
+        }
+        then.setHours(hours);
+        then.setMinutes(minutes);
+        then.setSeconds(seconds);
+        then.setMilliseconds(milliseconds);
+
+        var timeout = (then.getTime() - now.getTime());
+        setTimeout(function() { window.location.reload(true); }, timeout);
+    }
 
 
 
